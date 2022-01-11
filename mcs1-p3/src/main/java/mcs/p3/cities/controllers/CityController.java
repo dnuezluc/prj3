@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import mcs.p3.cities.DTOs.CityDTO;
 import mcs.p3.cities.entities.City;
 import mcs.p3.cities.entities.Country;
+import mcs.p3.cities.exceptions.ApiException;
+import mcs.p3.cities.exceptions.ErrorMessage;
 import mcs.p3.cities.services.CityService;
 
 @RestController
@@ -33,6 +35,8 @@ public class CityController {
 	@Operation(summary = "Get All Cities", description = "Method to get All Cities")
 	public List<CityDTO> getAll() {
 		List<CityDTO> dtos = service.getAll();
+		if(dtos==null || dtos.size()==0)
+			throw new ApiException(new ErrorMessage(3).getMessage(),3);
 		dtos.forEach(d-> this.generateLink(d));
 		return dtos;
 	}
@@ -41,6 +45,7 @@ public class CityController {
 	@Operation(summary = "Get Cities by Id", description = "Method to get City its input param id")
 	public CityDTO getById(@PathVariable Long id) {
 		CityDTO dto = service.getById(id);
+		if(dto==null) throw new ApiException(new ErrorMessage(1).getMessage(),1);
 		this.generateLink(dto);
 		return dto;
 	}
