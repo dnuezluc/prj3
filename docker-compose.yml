@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  eureka-servicep3:
+    image: mcs/eureka-p3:0.0.1-SNAPSHOT
+    container_name: eureka-servicep3
+    hostname: eureka-servicep3
+    ports: 
+      - "8761:8761"
+    
+  cities-service:
+    image: mcs/mcs1-p3:0.0.1-SNAPSHOT
+    container_name: cities-service
+    hostname: cities-service
+    ports:
+      - "8080:8080"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka-servicep3:8761/eureka
+    
+  activities-service:
+    image: mcs/mcs2-p3:0.0.1-SNAPSHOT
+    container_name: activities-service
+    hostname: activities-service
+    ports:
+      - "8100:8100"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka-servicep3:8761/eureka
+    
+  tourism-service:
+    image: mcs/mcs3-p3:0.0.1-SNAPSHOT
+    container_name: tourism-service
+    hostname: tourism-service
+    ports:
+      - "9000:9000"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka-servicep3:8761/eureka
+    
+  gatewayp3-service:
+      image: mcs/gateway-p3:0.0.1-SNAPSHOT
+      container_name: gatewayp3-service
+      hostname: gatewayp3-service
+      ports:
+        - "9090:9090"
+      environment:
+        - eureka-client-serviceUrl-defaultZone=http://eureka-servicep3:8761/eureka
